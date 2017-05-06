@@ -1,0 +1,188 @@
+<html>
+    <head>
+        <title>Project 3</title>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.js">
+        </script>
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+        
+    </head>
+
+    <body>
+        <script>
+            
+            function onlyUnique(value, index, self) {
+                return self.indexOf(value) == index;
+            }
+            
+            function Ship(name,length) {
+                //name = string of name of ship
+                //length = length of ship
+                this.name = name;
+                this.len = length;
+                this.valid_placements = [];
+            }
+              
+            
+            function ValidPlacement(Board, i, j, k, length){
+                // Board = Two dimensional array representing board
+                // i = row
+                // j = column
+                // k = orientation
+                
+                var occupied = 0;
+                
+                //Horizontal Ship
+                if (k == 0){
+                    if (j>10-length){
+                        return 0;
+                        }
+                    else{
+                        for(l = 0; l<length; l++){
+                            occupied = occupied+Board[i][j+l];
+                        }
+                        if (occupied == 0){
+                            return 1;
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                }
+            
+                //Vertical Ship
+                if (k == 1){
+                    if (i>10-length){
+                        return 0;
+                        }
+                    else{
+                        for(l = 0; l<length; l++){
+                            occupied = occupied+Board[i+l][j];
+                        }
+                        if (occupied == 0){
+                            return 1;
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                }
+            }
+            
+            
+            function ValidLocations(Board, Ship_List) {
+                //Board = 2d Array
+                //Ship_List = list of ship objects
+                
+                Ship_List.forEach(function(ship) {
+                    var valid_placements = []
+                    var len = ship.len
+                    
+                    for(i = 0; i<10; i++){
+                        for(j = 0; j<10; j++){
+                            for(k = 0; k<2; k++){
+                                if (ValidPlacement(Board,i,j,k,len)==1){
+                                    valid_placements.push([i,j,k]);
+                                }
+                            }
+                        }
+                    }
+                    ship.valid_placements = valid_placements
+                });
+            
+            }
+            
+            
+            function SpacesOccupied(length, location) {
+                //length = length of ship
+                //location = [i,j,k]
+                //Returns: list of spaces occupied by ship
+                
+                var occupied = [];
+                var i = location[0];
+                var j = location[1];
+                var k = location[2];
+                
+                if (k==0){
+                    for(l = 0; l<length; l++){
+                        occupied.push([i,j+l]);
+                    }
+                }
+                
+                if (k==1){
+                    for(l = 0; l<length; l++){
+                        occupied.push([i+l,j]);
+                    }
+                }
+                
+                return occupied;
+            
+            }
+            
+            
+            function RandomSample(Ship_List) {
+                var PDF = math.zeros(10,10).toArray();
+                var spaces_occ = [];
+                
+                Ship_List.forEach(function(ship){
+                    var locations = ship.valid_placements;
+                    var index = Math.floor(Math.random()*locations.length);
+                    var location = locations[index];
+                    var spaces = SpacesOccupied(ship.len,location);
+                    spaces_occ = spaces_occ.concat(spaces);
+                });
+                
+                var fail = 0;
+                spaces_occ.forEach(function(space){
+                    var i = space[0];
+                    var j = space[1];
+                    if (PDF[i][j] != 0){
+                        fail = 1;                        
+                    }  
+                    PDF[i][j] = 1;
+                });
+                
+                //Check if valid configuration
+                if(fail == 1){
+                    return false;
+                }
+                else{
+                    return PDF;
+                }
+            }
+            
+            
+            function NSamples(N,M,Ship_List) {
+                //N = Number of Samples Wanted
+                //M = Number of iterations
+                
+                var PDF = math.zeros(10,10).toArray();
+                var n = 0;
+                var m = 0;
+                
+                while( (n<N) && (m<M) ){
+                    m = m+1;
+                    var Result = RandomSample(Ship_List);
+                    if (typeof(Result) != "boolean"){
+                        PDF = math.add(PDF,Result);
+                    }
+                }
+                return PDF;            
+            }
+            
+            
+            
+            
+            // Example Ships and Board
+            var x = [new Ship("Battleship",4), new Ship("Carrier",5)];
+            
+            var Board = math.zeros(10,10).toArray();
+            Board[0][0] = 1;
+            Board[0][1] = 1;
+            Board[1][0] = 1;
+            
+            
+            
+        </script>        
+    </body>
+</html>
