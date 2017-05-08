@@ -5,10 +5,53 @@
         <script src="https://code.jquery.com/jquery-1.10.2.js">
         </script>
         <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+        <style>
+            .button1{
+                background-color: #CCCCCC;
+                color: black;
+                text-align: center;
+                padding: 14px;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin: 4px 6px;
+                cursor: pointer;
+                -webkit-transition-duration: 0.4s; /* Safari */
+                transition-duration: 0.4s;
+                border: 1px solid;
+                outline: none;
+                /*width:100%;*/
+                border-radius: 6px;
+                font-weight: 100;
+                }
+            
+            .button2{
+                background-color: #1C6BA0;
+                color: white;
+                text-align: center;
+                padding: 14px;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin: 4px 6px;
+                cursor: pointer;
+                -webkit-transition-duration: 0.4s; /* Safari */
+                transition-duration: 0.4s;
+                border: 1px solid;
+                outline: none;
+                /*width:100%;*/
+                border-radius: 6px;
+                font-weight: 100;
+                }
+        </style>
         
     </head>
 
     <body>
+        <div id="ShipButtonHolder"></div>
+        <div id="BoardButtonHolder"></div>
+        
+        
         <script>
             
             function Ship(name,length) {
@@ -178,6 +221,118 @@
             Board[1][0] = 1;
             
             
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //Adding buttons for Ships
+            var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
+            
+            var Ship_BH = d3.select("#ShipButtonHolder");
+            var ship_buttons = Ship_BH.selectAll("input").data(Game_Ships);
+
+            ship_buttons.enter()
+            .append("input")
+            .attr("type","button")
+            .attr("class","button button1")
+            .attr("clicked","false")
+            .attr("id",function(d,i){return "button"+i})
+            .attr("value", function (d){return d; })
+            .on("click", function(d){
+                if(d3.select(this).attr("clicked")=="false"){
+                    d3.select(this).attr("clicked","true");
+                    makeButtonDark(this);
+                }
+                else{
+                    d3.select(this).attr("clicked","false");
+                    makeButtonLight(this);
+                }
+            })
+            .on("mouseover", function(d)
+               {
+                makeButtonDark(this)
+            })
+            .on("mouseout",function(d)
+               {
+                   if(d3.select(this).attr("clicked")=="false")
+                    {
+                        makeButtonLight(this);
+                    }
+            });
+            
+            function makeButtonDark(btn)
+            {
+                d3.select(btn).style("background-color","#848482");
+                d3.select(btn).style("color","white");
+                d3.select(btn).style("font-weight",500); 
+            }
+            
+            function makeButtonLight(btn)
+            {
+                d3.select(btn).style("background-color","#CCCCCC");
+                d3.select(btn).style("color","black");
+                d3.select(btn).style("font-weight",500); 
+            }
+            
+            
+            
+            
+            
+            
+            //Adding buttons for Board
+            var Board_Cells = [];
+            
+            for(i=0;i<10;i++){
+                for(j=0;j<10;j++){
+                    Board_Cells.push([i,j]);
+                }
+            }
+            
+            var Board_BH = d3.select("#BoardButtonHolder");
+            var board_buttons = Board_BH.selectAll("input").data(Board_Cells);
+            
+            board_buttons.enter()
+            .append("input")
+            .attr("type","button")
+            .attr("class","button button2")
+            .attr("clicked","false")
+            .attr("id",function(d,i){return "button"+i})
+            .attr("value", function (d){return d; })
+            .on("mouseover", function(d)
+               {
+                makeButtonDark(this)
+            })
+            .on("mouseout",function(d)
+               {
+                   if(d3.select(this).attr("clicked")=="false")
+                    {
+                        makeButtonBlue(this);
+                    }
+            });
+            
+            function makeButtonBlue(btn)
+            {
+                d3.select(btn).style("background-color","#1C6BA0");
+                d3.select(btn).style("color","white");
+                d3.select(btn).style("font-weight",500); 
+            }
             
         </script>        
     </body>
