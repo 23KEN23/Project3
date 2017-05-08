@@ -25,6 +25,17 @@
                 font-weight: 100;
                 }
             
+            #BoardButtonHolder
+            {
+                /*display: inline-block;
+                float: left;
+                width:150px;*/
+                width: 500px;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
             .button2{
                 background-color: #1C6BA0;
                 color: white;
@@ -33,14 +44,13 @@
                 text-decoration: none;
                 display: inline-block;
                 font-size: 14px;
-                margin: 4px 6px;
                 cursor: pointer;
                 -webkit-transition-duration: 0.4s; /* Safari */
                 transition-duration: 0.4s;
                 border: 1px solid;
                 outline: none;
                 /*width:100%;*/
-                border-radius: 6px;
+                border-radius: 3px;
                 font-weight: 100;
                 }
         </style>
@@ -213,24 +223,24 @@
             
             
             // Example Ships and Board
-            var x = [new Ship("Battleship",4), new Ship("Carrier",5)];
+            var Enemy_Ships = [new Ship("Battleship",4), new Ship("Carrier",5)];
             
             var Board = math.zeros(10,10).toArray();
             Board[0][0] = 1;
             Board[0][1] = 1;
             Board[1][0] = 1;
             
+            ValidLocations(Board, Enemy_Ships);
+            
+            var PDF = NSamples(2000,4000,Enemy_Ships);
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            // Steps to do
+            // Create "Enemy_ships" list from which ship buttons are selected
+            // Create "Board" matrix from selected tiles
+            // Run "ValidLocations" function with Board and ships
+            // Run NSamples to get PDF
+            // Add "Calculate" button
             
             
             
@@ -315,6 +325,16 @@
             .attr("clicked","false")
             .attr("id",function(d,i){return "button"+i})
             .attr("value", function (d){return d; })
+            .on("click", function(d){
+                if(d3.select(this).attr("clicked")=="false"){
+                    d3.select(this).attr("clicked","true");
+                    makeButtonDark(this);
+                }
+                else{
+                    d3.select(this).attr("clicked","false");
+                    makeButtonBlue(this);
+                }
+            })
             .on("mouseover", function(d)
                {
                 makeButtonDark(this)
