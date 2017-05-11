@@ -52,6 +52,8 @@
                 border-radius: 3px;
                 font-weight: 100;
                 }
+            
+            
         </style>
         
     </head>
@@ -63,11 +65,28 @@
         
         <script>
             
-            function Ship(name,length) {
+            function Ship(name) {
                 //name = string of name of ship
                 //length = length of ship
+                var l;
+                if(name=="Carrier"){
+                    l = 5;
+                }
+                if(name=="Battleship"){
+                    l = 4;
+                }
+                if(name=="Cruiser"){
+                    l = 3;
+                }
+                if(name=="Submarine"){
+                    l = 3;
+                }
+                if(name=="Destroyer"){
+                    l = 2;
+                }
+                
                 this.name = name;
-                this.len = length;
+                this.len = l;
                 this.valid_placements = [];
             }
               
@@ -212,42 +231,60 @@
                     m = m+1;
                     var Result = RandomSample(Ship_List);
                     if (typeof(Result) != "boolean"){
+                        n = n+1;
                         PDF = math.add(PDF,Result);
                     }
                 }
-                return PDF;            
+                return math.divide(PDF,n);            
             }
             
             
             
             
-            // Example Ships and Board
-            var Enemy_Ships = [new Ship("Battleship",4), new Ship("Carrier",5)];
-            
-            var Board = math.zeros(10,10).toArray();
-            Board[0][0] = 1;
-            Board[0][1] = 1;
-            Board[1][0] = 1;
-            
-            ValidLocations(Board, Enemy_Ships);
-            
-            var PDF = NSamples(2000,4000,Enemy_Ships);
-            
-            
-            // Steps to do
-            // Create "Enemy_ships" list from which ship buttons are selected
-            // Create "Board" matrix from selected tiles
-            // Run "ValidLocations" function with Board and ships
-            // Run NSamples to get PDF
-            // Add "Calculate" button
             
             
             
+            // EXAMPLE HOW TO MAKE A PDF
             
+            function TEST(){
+                var Enemy_Ships = ShipstoArray(Ship_Dict);
+                var Board = BoardtoMatrix(Board_Dict);
+
+                ValidLocations(Board,Enemy_Ships);
+
+                var PDF = NSamples(20000,40000,Enemy_Ships);
+                
+                return PDF;
+            }
             
+
+
             
+            var Board_Dict = {};
+            var Ship_Dict = {};
             
+            function ShipstoArray(dict){
+                var Enemy_Ships = []
+                var keys = Object.keys(dict);
+                keys.forEach(function(name){
+                    var ship = new Ship(name);
+                    Enemy_Ships.push(ship);
+                })
+                return Enemy_Ships;
+            }
             
+            function BoardtoMatrix(dict){
+                var Board = math.zeros(10,10).toArray();
+                var keys = Object.keys(dict);
+                keys.forEach(function(location){
+                    var i = parseInt(location[0]);
+                    var j = parseInt(location[2]);
+                    Board[i][j] = 1;
+                })
+                return Board;
+            }
+            
+        
             
             
             
@@ -268,10 +305,12 @@
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
                     makeButtonDark(this);
+                    Ship_Dict[this.value] = 1;
                 }
                 else{
                     d3.select(this).attr("clicked","false");
                     makeButtonLight(this);
+                    delete Ship_Dict[this.value];
                 }
             })
             .on("mouseover", function(d)
@@ -328,10 +367,12 @@
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
                     makeButtonDark(this);
+                    Board_Dict[this.value] = 1
                 }
                 else{
                     d3.select(this).attr("clicked","false");
                     makeButtonBlue(this);
+                    delete Board_Dict[this.value];
                 }
             })
             .on("mouseover", function(d)
@@ -346,13 +387,13 @@
                     }
             });
             
-            function makeButtonBlue(btn)
-            {
+            function makeButtonBlue(btn){
                 d3.select(btn).style("background-color","#1C6BA0");
                 d3.select(btn).style("color","white");
                 d3.select(btn).style("font-weight",500); 
             }
             
+
         </script>        
     </body>
 </html>
