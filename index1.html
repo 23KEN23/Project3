@@ -8,10 +8,11 @@
         <style>
             body
             {
-                background: -webkit-radial-gradient(#44274A, #191636); /* Safari 5.1 to 6.0 */
-                background: -o-radial-gradient(#44274A, #191636); /* For Opera 11.6 to 12.0 */
-                background: -moz-radial-gradient(#44274A, #191636); /* For Firefox 3.6 to 15 */
-                background: radial-gradient(#44274A, #191636);
+                background: #333334;
+                background: -webkit-linear-gradient(bottom right, #333334, #395467); /* For Safari 5.1 to 6.0 */
+                background: -o-linear-gradient(bottom right, #333334, #395467); /* For Opera 11.1 to 12.0 */
+                background: -moz-linear-gradient(bottom right, #333334, #395467); /* For Firefox 3.6 to 15 */
+                background: linear-gradient(to bottom right, #333334, #395467); 
                 text-align: center;
             }
             .button1{
@@ -383,7 +384,7 @@
             .attr("class","button button2")
             .attr("clicked","false")
             .attr("id",function(d,i){return "button"+i})
-            .attr("value", function (d){return d; })
+            //.attr("value", function (d){return d; })
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
