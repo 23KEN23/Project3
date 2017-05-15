@@ -47,8 +47,8 @@
                 /*display: inline-block;
                 float: left;
                 width:150px;*/
-                width:700px;
-                height:700px;
+                width:800px;
+                height:800px;
                 margin-top: 30px;
                 margin-bottom: 20px;
                 display:inline-block;
@@ -63,15 +63,20 @@
                 display: inline-block;
                 font-size: 14px;
                 cursor: pointer;
-                -webkit-transition-duration: 0.4s; /* Safari */
-                transition-duration: 0.4s;
+               -webkit-transition: all 0.5s ease-in-out;
+                -moz-transition: all 0.5s ease-in-out;
+                -o-transition: all 0.5s ease-in-out;
+                -ms-transition: all 0.5s ease-in-out;
+                transition: all 0.5s ease-in-out;
                 border: 1px solid;
+                border-color: #3EDFED;
                 outline: none;
                 /*width:100%;*/
                 border-radius: 50%;
                 font-weight: 500;
-                width:10%;
-                height:10%;
+                width:40px;
+                height:40px;
+                margin: 20px;
                 }
             
             
@@ -412,7 +417,12 @@
             function makeButtonTransparent(btn){
                 d3.select(btn).style("background-color","transparent");
                 d3.select(btn).style("color","#3EDFED");
-                d3.select(btn).style("font-weight",500); 
+                d3.select(btn).style("font-weight",500);
+                d3.select(btn).style("transform","scale(1)");
+                /*d3.select(btn).style("width",40);
+                d3.select(btn).style("height",40);
+                d3.select(btn).style("margin-left",20);
+                d3.select(btn).style("margin-right",20);*/
             }
             
             function makeButtonBlue(btn)
@@ -420,6 +430,9 @@
                 d3.select(btn).style("background-color","#3EDFED");
                 d3.select(btn).style("color","white");
                 d3.select(btn).style("font-weight",500); 
+                d3.select(btn).style("transform","scale(1.5)");
+                //d3.select(btn).style("margin:0%");
+                
             }
             
 
