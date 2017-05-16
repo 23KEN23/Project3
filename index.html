@@ -5,6 +5,8 @@
         <script src="https://code.jquery.com/jquery-1.10.2.js">
         </script>
         <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+        <script src=https://cdn.jsdelivr.net/jstat/latest/jstat.min.js></script>
+        
         <style>
             body
             {
@@ -256,7 +258,23 @@
                         PDF = math.add(PDF,Result);
                     }
                 }
-                return math.divide(PDF,n);            
+                return [PDF,n];            
+            }
+            
+            function PDF(matrix,n){
+                return math.divide(matrix,n);
+            }
+            
+            function BinomialCI(a,k,n){
+                //a = percentage of confidence interval
+                //n = number of trials
+                //k = number of successes
+                var alpha = 1-a;
+                var ub = 1-jStat.beta.inv(alpha/2,n-k,k+1);
+                var lb = 1-jStat.beta.inv(1-(alpha/2),n-k+1,k);
+                
+                var CI = [lb,ub];
+                return CI;
             }
             
             
@@ -273,9 +291,11 @@
 
                 ValidLocations(Board,Enemy_Ships);
 
-                var PDF = NSamples(20000,40000,Enemy_Ships);
+                var samples = NSamples(20000,40000,Enemy_Ships);
+                var pdf = samples[0];
+                var n = samples[1];
                 
-                return PDF;
+                return [pdf,n];
             }
             
 
