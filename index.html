@@ -331,6 +331,21 @@
                 d3.select(btn).style("font-weight",500); 
             }
             
+            function generateHeatMap() {
+                var maxVal =  d3.max(pdf, function(d) { return d3.max(d); });
+                console.log(maxVal);
+
+                var colorScale = d3.scaleLinear()
+                    .domain([0,0.0000000001,  maxVal/2, maxVal])
+                    .range(['black','grey', 'orange', 'red']);
+
+                for (var i = 0; i < 10; i++) {
+                    for (var j = 0; j < 10; j++) {
+                        var button = d3.select("#BoardButtonHolder").select("#button" + (i*10+j));
+                        button.style("background-color", colorScale(pdf[i][j]));
+                    }
+                }
+            }
             
 
 
@@ -339,14 +354,9 @@
             var Ship_Dict = {};
             var N;
             var count_matrix;
+            var pdf;
             
-
-            
-
-            
-        
-            
-            
+    
             
             //Adding buttons for Ships
             var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
@@ -385,6 +395,16 @@
                     }
             });
 
+            /* heat map color scale */
+
+
+            /* min = 0, max of probabilities + cushion */
+            // var buckets = maxProb + cushion / ;
+
+
+
+            
+
             
             d3.select("#ExecuteGame").append("input")
                 .attr("type", "button")
@@ -396,6 +416,8 @@
                     var result = CALCULATE();
                     count_matrix = result[0];
                     N = result[1];
+                    pdf = PDF(count_matrix, N);
+                    generateHeatMap();
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
@@ -440,7 +462,9 @@
             })
             .on("mouseover", function(d)
                {
-                makeButtonBlue(this)
+                if (d3.select(this).attr("clicked") == "false") {
+                    makeButtonBlue(this);
+                } 
             })
             .on("mouseout",function(d)
                {
