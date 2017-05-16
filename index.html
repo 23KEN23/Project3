@@ -261,9 +261,11 @@
                 return [PDF,n];            
             }
             
+            
             function PDF(matrix,n){
                 return math.divide(matrix,n);
             }
+            
             
             function BinomialCI(a,k,n){
                 //a = percentage of confidence interval
@@ -278,14 +280,7 @@
             }
             
             
-            
-            
-            
-            
-            
-            // EXAMPLE HOW TO MAKE A PDF
-            
-            function TEST(){
+            function CALCULATE(){
                 var Enemy_Ships = ShipstoArray(Ship_Dict);
                 var Board = BoardtoMatrix(Board_Dict);
 
@@ -298,11 +293,6 @@
                 return [pdf,n];
             }
             
-
-
-            
-            var Board_Dict = {};
-            var Ship_Dict = {};
             
             function ShipstoArray(dict){
                 var Enemy_Ships = []
@@ -312,7 +302,8 @@
                     Enemy_Ships.push(ship);
                 })
                 return Enemy_Ships;
-            }
+            }    
+            
             
             function BoardtoMatrix(dict){
                 var Board = math.zeros(10,10).toArray();
@@ -324,6 +315,34 @@
                 })
                 return Board;
             }
+            
+            
+            function makeButtonDark(btn)
+            {
+                d3.select(btn).style("background-color","#848482");
+                d3.select(btn).style("color","white");
+                d3.select(btn).style("font-weight",500); 
+            }
+            
+            function makeButtonLight(btn)
+            {
+                d3.select(btn).style("background-color","#CCCCCC");
+                d3.select(btn).style("color","black");
+                d3.select(btn).style("font-weight",500); 
+            }
+            
+            
+
+
+            
+            var Board_Dict = {};
+            var Ship_Dict = {};
+            var N;
+            var count_matrix;
+            
+
+            
+
             
         
             
@@ -366,6 +385,7 @@
                     }
             });
 
+            
             d3.select("#ExecuteGame").append("input")
                 .attr("type", "button")
                 .attr("class","button button1")
@@ -373,16 +393,9 @@
                 .attr("id", "execute")
                 .attr("value", "Calculate")
                 .on("click", function(d){
-                    if(d3.select(this).attr("clicked")=="false"){
-                        d3.select(this).attr("clicked","true");
-                        makeButtonDark(this);
-                        Ship_Dict[this.value] = 1;
-                    }
-                    else{
-                        d3.select(this).attr("clicked","false");
-                        makeButtonLight(this);
-                        delete Ship_Dict[this.value];
-                    }
+                    var result = CALCULATE();
+                    count_matrix = result[0];
+                    N = result[1];
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
@@ -392,24 +405,6 @@
                             makeButtonLight(this);
                         }
                 });
-            
-            function makeButtonDark(btn)
-            {
-                d3.select(btn).style("background-color","#848482");
-                d3.select(btn).style("color","white");
-                d3.select(btn).style("font-weight",500); 
-            }
-            
-            function makeButtonLight(btn)
-            {
-                d3.select(btn).style("background-color","#CCCCCC");
-                d3.select(btn).style("color","black");
-                d3.select(btn).style("font-weight",500); 
-            }
-            
-            
-            
-            
             
             
             //Adding buttons for Board
