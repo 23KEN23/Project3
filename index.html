@@ -37,7 +37,7 @@
             
             #ShipButtonHolder{
                 margin-top: 15%;
-                margin-bottom: 90px;
+                margin-bottom: 10px;
             }
             
             #BoardButtonHeatMapHolder
@@ -82,10 +82,10 @@
 
     <body>
         <div id="ShipButtonHolder"></div>
+        <div id="ExecuteGame"></div>
         <div id="BoardButtonHeatMapHolder">
             <div id="BoardButtonHolder"></div>
         </div>
-        
         <script>
             
             function Ship(name) {
@@ -365,6 +365,33 @@
                         makeButtonLight(this);
                     }
             });
+
+            d3.select("#ExecuteGame").append("input")
+                .attr("type", "button")
+                .attr("class","button button1")
+                .attr("clicked","false")
+                .attr("id", "execute")
+                .attr("value", "Calculate")
+                .on("click", function(d){
+                    if(d3.select(this).attr("clicked")=="false"){
+                        d3.select(this).attr("clicked","true");
+                        makeButtonDark(this);
+                        Ship_Dict[this.value] = 1;
+                    }
+                    else{
+                        d3.select(this).attr("clicked","false");
+                        makeButtonLight(this);
+                        delete Ship_Dict[this.value];
+                    }
+                })
+                .on("mouseover", function() {
+                    makeButtonDark(this)
+                })
+                .on("mouseout",function() {
+                       if(d3.select(this).attr("clicked") == "false") {
+                            makeButtonLight(this);
+                        }
+                });
             
             function makeButtonDark(btn)
             {
