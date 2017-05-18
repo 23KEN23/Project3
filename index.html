@@ -10,10 +10,10 @@
         <style>
             body
             {
-                background: -webkit-radial-gradient(#44274A, #191636); /* Safari 5.1 to 6.0 */
-                background: -o-radial-gradient(#44274A, #191636); /* For Opera 11.6 to 12.0 */
-                background: -moz-radial-gradient(#44274A, #191636); /* For Firefox 3.6 to 15 */
-                background: radial-gradient(#44274A, #191636);
+                background: -webkit-radial-gradient(#395467, #333334); /* Safari 5.1 to 6.0 */
+                background: -o-radial-gradient(#395467, #333334); /* For Opera 11.6 to 12.0 */
+                background: -moz-radial-gradient(#395467, #333334); /* For Firefox 3.6 to 15 */
+                background: radial-gradient(#395467, #333334);
                 text-align: center;
             }
             .button1{
@@ -48,10 +48,10 @@
                 /*display: inline-block;
                 float: left;
                 width:150px;*/
-                width:700px;
-                height:700px;
+                width:750px;
+                height:750px;
                 margin-top: 30px;
-                margin-bottom: 20px;
+                margin-bottom: 40px;
                 display:inline-block;
             }
             
@@ -64,15 +64,23 @@
                 display: inline-block;
                 font-size: 14px;
                 cursor: pointer;
-                -webkit-transition-duration: 0.4s; /* Safari */
-                transition-duration: 0.4s;
+               -webkit-transition: all 0.5s ease-in-out;
+                -moz-transition: all 0.5s ease-in-out;
+                -o-transition: all 0.5s ease-in-out;
+                -ms-transition: all 0.5s ease-in-out;
+                transition: all 0.5s ease-in-out;
                 border: 1px solid;
+                border-color: rgba(222,153,144,0.5);
                 outline: none;
                 /*width:100%;*/
                 border-radius: 50%;
                 font-weight: 500;
-                width:10%;
-                height:10%;
+                width:30px;
+                height:30px;
+                margin: 20px;
+                /*-webkit-transition-duration: 0.4s;*/ /* Safari */
+                /*transition-duration: 0.4s;*/
+                
                 }
             
             
@@ -451,19 +459,19 @@
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
-                    makeButtonDark(this);
+                    makeButtonPink(this);
                     Board_Dict[this.value] = 1
                 }
                 else{
                     d3.select(this).attr("clicked","false");
-                    makeButtonBlue(this);
+                    makeButtonTransparent(this);
                     delete Board_Dict[this.value];
                 }
             })
             .on("mouseover", function(d)
                {
                 if (d3.select(this).attr("clicked") == "false") {
-                    makeButtonBlue(this);
+                    makeButtonPink(this);
                 } 
             })
             .on("mouseout",function(d)
@@ -476,15 +484,21 @@
             
             function makeButtonTransparent(btn){
                 d3.select(btn).style("background-color","transparent");
-                d3.select(btn).style("color","#3EDFED");
-                d3.select(btn).style("font-weight",500); 
+                d3.select(btn).style("font-weight",500);
+                d3.select(btn).style("transform","scale(1)");
+                /*d3.select(btn).style("width",40);
+                d3.select(btn).style("height",40);
+                d3.select(btn).style("margin-left",20);
+                d3.select(btn).style("margin-right",20);*/
             }
             
-            function makeButtonBlue(btn)
+            function makeButtonPink(btn)
             {
-                d3.select(btn).style("background-color","#3EDFED");
-                d3.select(btn).style("color","white");
+                d3.select(btn).style("background-color","#F28573");
                 d3.select(btn).style("font-weight",500); 
+                d3.select(btn).style("transform","scale(1.5)");
+                //d3.select(btn).style("margin:0%");
+                
             }
             
 
