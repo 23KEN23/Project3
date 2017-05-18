@@ -341,7 +341,6 @@
             
             function generateHeatMap() {
                 var maxVal =  d3.max(pdf, function(d) { return d3.max(d); });
-                console.log(maxVal);
 
                 var colorScale = d3.scaleLinear()
                     .domain([0,0.0000000001,  maxVal/2, maxVal])
@@ -353,6 +352,29 @@
                         button.style("background-color", colorScale(pdf[i][j]));
                     }
                 }
+                var height = 750;
+                var gridSize = Math.floor(750/24);
+                var legendElementWidth = gridSize * 2;
+                var legend = d3.select("#BoardButtonHolder").selectAll(".legend")
+                  .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+
+                legend.enter().append("g")
+                  .attr("class", "legend");
+
+                legend.append("rect")
+                    .attr("x", function(d, i) { return legendElementWidth * i; })
+                    .attr("y", height)
+                    .attr("width", legendElementWidth)
+                    .attr("height", gridSize / 2)
+                    .style("fill", function(d, i) { return colorScale[i]; });
+
+                legend.append("text")
+                    .attr("class", "mono")
+                    .text(function(d) { return "≥ " + Math.round(d); })
+                    .attr("x", function(d, i) { return legendElementWidth * i; })
+                    .attr("y", height + gridSize);
+
+                legend.exit().remove();
             }
     
             
@@ -375,6 +397,7 @@
             .attr("clicked","false")
             .attr("id",function(d,i){return "button"+i})
             .attr("value", function (d){return d; })
+            .style("color","transparent")
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
