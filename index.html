@@ -449,9 +449,18 @@
                                 .style("font-weight",500)
                                 .style("transform","scale(1)");
 
-                            delete Board_Dict[button.attr("value")];
-                            calculateClicked = false;
+                            delete Board_Dict[button.attr("value")];                            
                         });
+                    calculateClicked = false;
+                    d3.select("#ShipButtonHolder").selectAll(".button.button1")
+                            .each(function(d,i) {
+                                var button = d3.select("#ShipButtonHolder").select("#button" + i)
+                                .attr("clicked", "false")
+                                .style("background-color","#CCCCCC")
+                                .style("color","black")
+                                .style("font-weight",500); 
+                                delete Ship_Dict[button.attr("value")];
+                            });
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
