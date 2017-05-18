@@ -352,29 +352,11 @@
                         button.style("background-color", colorScale(pdf[i][j]));
                     }
                 }
+
                 var height = 750;
                 var gridSize = Math.floor(750/24);
                 var legendElementWidth = gridSize * 2;
-                var legend = d3.select("#BoardButtonHolder").selectAll(".legend")
-                  .data([0].concat(colorScale.quantiles()), function(d) { return d; });
-
-                legend.enter().append("g")
-                  .attr("class", "legend");
-
-                legend.append("rect")
-                    .attr("x", function(d, i) { return legendElementWidth * i; })
-                    .attr("y", height)
-                    .attr("width", legendElementWidth)
-                    .attr("height", gridSize / 2)
-                    .style("fill", function(d, i) { return colorScale[i]; });
-
-                legend.append("text")
-                    .attr("class", "mono")
-                    .text(function(d) { return "≥ " + Math.round(d); })
-                    .attr("x", function(d, i) { return legendElementWidth * i; })
-                    .attr("y", height + gridSize);
-
-                legend.exit().remove();
+                
             }
     
             
@@ -459,8 +441,17 @@
                 .attr("id", "execute")
                 .attr("value", "Refresh")
                 .on("click", function(d){
-                    var buttons = d3.select("#BoardButtonHolder").selectAll(".button.button2");
+                    var button = d3.select("#BoardButtonHolder").selectAll(".button.button2")
+                        .each(function(d,i) {
+                            var button = d3.select("#BoardButtonHolder").select("#button" + i)
+                                .attr("clicked", "false")
+                                .style("background-color","transparent")
+                                .style("font-weight",500)
+                                .style("transform","scale(1)");
 
+                            delete Board_Dict[button.attr("value")];
+                            calculateClicked = false;
+                        });
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
