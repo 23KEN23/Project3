@@ -354,18 +354,14 @@
                     }
                 }
             }
-            
-
-
+    
             
             var Board_Dict = {};
             var Ship_Dict = {};
             var N;
             var count_matrix;
             var pdf;
-            
-    
-            
+                    
             //Adding buttons for Ships
             var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
             
@@ -402,15 +398,6 @@
                         makeButtonLight(this);
                     }
             });
-
-            /* heat map color scale */
-
-
-            /* min = 0, max of probabilities + cushion */
-            // var buckets = maxProb + cushion / ;
-
-
-
             
 
             
@@ -421,6 +408,11 @@
                 .attr("id", "execute")
                 .attr("value", "Calculate")
                 .on("click", function(d){
+                    /* first check at least 1 ship button has been pressed */
+                    if (Object.keys(Ship_Dict).length < 1) {
+                        alert("Please select at least one type of ship to search for!");
+                        return;
+                    }
                     var result = CALCULATE();
                     count_matrix = result[0];
                     N = result[1];
@@ -435,6 +427,26 @@
                             makeButtonLight(this);
                         }
                 });
+
+             d3.select("#ExecuteGame").append("input")
+                .attr("type", "button")
+                .attr("class","button button1")
+                .attr("clicked","false")
+                .attr("id", "execute")
+                .attr("value", "Refresh")
+                .on("click", function(d){
+                    var buttons = d3.select("#BoardButtonHolder").selectAll(".button.button2");
+
+                })
+                .on("mouseover", function() {
+                    makeButtonDark(this)
+                })
+                .on("mouseout",function() {
+                       if(d3.select(this).attr("clicked") == "false") {
+                            makeButtonLight(this);
+                        }
+                });
+
             
             
             //Adding buttons for Board
