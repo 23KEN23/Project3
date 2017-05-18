@@ -467,6 +467,7 @@
             .attr("class","button button2")
             .attr("clicked","false")
             .attr("id",function(d,i){return "button"+i})
+            .style("color","transparent")
             .attr("value", function (d){return d; })
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
