@@ -399,7 +399,7 @@
                     }
             });
             
-
+            var calculateClicked = false;
             
             d3.select("#ExecuteGame").append("input")
                 .attr("type", "button")
@@ -418,6 +418,7 @@
                     N = result[1];
                     pdf = PDF(count_matrix, N);
                     generateHeatMap();
+                    calculateClicked = true;
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
@@ -483,13 +484,13 @@
             })
             .on("mouseover", function(d)
                {
-                if (d3.select(this).attr("clicked") == "false") {
+                if (d3.select(this).attr("clicked") == "false" && calculateClicked==false) {
                     makeButtonPink(this);
                 } 
             })
             .on("mouseout",function(d)
                {
-                   if(d3.select(this).attr("clicked")=="false")
+                   if(d3.select(this).attr("clicked")=="false" && calculateClicked==false)
                     {
                         makeButtonTransparent(this);
                     }
