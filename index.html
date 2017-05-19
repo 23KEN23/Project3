@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Project 3</title>
+        <title>Battleship Calculator</title>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js">
         </script>
@@ -36,7 +36,7 @@
                 }
             
             #ShipButtonHolder{
-                margin-top: 50px;
+                margin-top: 20px;
                 margin-bottom: 10px;
             }
             
@@ -90,6 +90,15 @@
 
     <body>
         <h1>BATTLESHIP CALCULATOR</h1>
+        <h3>Instructions</h3>
+        <p>
+            1) Select the enemy ships you still need to find <br>
+            2) Select which grid spaces you've already shot into <br>
+            3) Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship <br>
+            4) If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
+            Click "Refresh" to reset the board
+            
+        </p>
         <div id="ShipButtonHolder"></div>
         <div id="ExecuteGame"></div>
         <div id="BoardButtonHeatMapHolder">
