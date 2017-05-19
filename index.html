@@ -170,8 +170,11 @@
                 margin: auto;
                 width: 600;
                 font-family: 'Roboto';
+                line-height: 50px;
+                letter-spacing: 4px;
                 font-size: 18px;
                 color: white;
+                font-weight:100;
             }
             
             #HeatMapStats
@@ -188,6 +191,7 @@
             {
                 font-weight: 600;
                 color: #F28573;
+
             }
             
             
@@ -512,6 +516,16 @@
                             });
                     }
                 }
+                var width = 750, height = 150;
+
+                var svg = d3.select("#BoardButtonHolder").append("svg")
+                    .attr("height", height)
+                    .attr("width", width)
+                    .attr("stroke", "white")
+                    .attr("stroke-width", "2")
+                    .attr("fill", "white")
+                    .attr("background-color", "transparent");
+
                 
             }
     
