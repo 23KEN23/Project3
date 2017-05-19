@@ -378,7 +378,7 @@
                             .style("background-color", colorScale(probability))
                             .style("transform", "scale("+ radiusScale(probability) + ")")
                             .attr("p", probability)
-                            .attr("ci_lower", interval[0])
+                            .attr("ci_lower", function() { return(isNaN(interval[0]) ? 0 : interval[0])})
                             .attr("ci_upper", interval[1])
                             .on("mouseover", function() {
                                 var heatMapStatsDiv = d3.select("#HeatMapStats");
