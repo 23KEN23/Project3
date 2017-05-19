@@ -479,6 +479,15 @@
                             });
                     }
                 }
+                var width = 750, height = 150;
+
+                var svg = d3.select("#BoardButtonHolder").append("svg")
+                    .attr("height", height)
+                    .attr("width", width)
+                    .attr("stroke", "white")
+                    .attr("stroke-width", "2")
+                    .attr("background-color", "transparent");
+
                 
             }
     
