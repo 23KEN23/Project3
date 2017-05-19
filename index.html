@@ -1,9 +1,10 @@
 <html>
     <head>
-        <title>Project 3</title>
+        <title>Battleship Calculator</title>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js">
         </script>
+        <link href = "https://fonts.googleapis.com/css?family=Lato|Roboto:900" rel="stylesheet">
         <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
         <script src=https://cdn.jsdelivr.net/jstat/latest/jstat.min.js></script>
         
@@ -43,6 +44,7 @@
                 margin-bottom: 20px;
                 text-align: center;
                 display: inline-block;
+
             }
             
             #BoardButtonHeatMapHolder
@@ -116,16 +118,71 @@
                 -ms-transition: all 0.3s ease-in-out;
                 transition: all 0.3s ease-in-out;
             }
+            #list
+            {
+                text-align: left;
+                font-family: 'Lato';
+                color: #bcbcbc;
+                align-self: center;
+                width: 600
+                
+            }
             
+            h1
+            {
+                text-align: center;
+                color: #1c1c1e;
+                font-size: 45;
+                font-family: 'Roboto';
+            }
+            
+            h3
+            {
+                text-align: center;
+                font-size: 30;
+                font-family: 'Roboto';
+            }
+            
+            #Instructions
+            {
+                margin: auto;
+                width: 600;
+                font-family: 'Roboto';
+                font-size: 18px;
+                color: white;
+            }
+            
+            #HeatMapStats
+            {
+                padding-top: 20px;
+                vertical-align: middle;
+                text-align: center;
+            }
+
         </style>
         
     </head>
 
     <body>
-        <div id="ShipButtonHolder">
+        <h1>BATTLESHIP CALCULATOR</h1>
+        <h3>INSTRUCTIONS</h3>
+        <div id="Instructions">
+            <p id="List">
+            <b>1.</b> Select the enemy ships you still need to find <br>
+            <b>2.</b> Select which grid spaces you've already shot into <br>
+            <b>3.</b> Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship. Hover to show the sample probability and confidence interval for that grid space. <br>
+            <b>4.</b> If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
+            <b>CLICK "REFRESH" TO RESET THE BOARD</b>
+            
+            </p>
         </div>
+        <div id="ShipButtonHolder"></div>
         <div id="ExecuteGame"></div>
         <div id="BoardButtonHeatMapHolder">
+            <div id="HeatMapStats">
+                <p id="Probability" style="visibility: hidden">Probability</p>
+                <p id="CI" style="visibility: hidden">CI</p>
+            </div>
             <div id="BoardButtonHolder"></div>
         </div>
         <script>
@@ -317,6 +374,9 @@
                 var ub = 1-jStat.beta.inv(alpha/2,n-k,k+1);
                 var lb = 1-jStat.beta.inv(1-(alpha/2),n-k+1,k);
                 
+                ub = Math.round(ub*1000)/1000
+                lb = Math.round(lb*1000)/1000
+                
                 var CI = [lb,ub];
                 return CI;
             }
@@ -380,16 +440,45 @@
                     .domain([0,0.0000000001,  maxVal/2, maxVal])
                     .range(['black','grey', 'orange', 'red']);
 
+                var radiusScale = d3.scaleLinear()
+                    .domain([0,maxVal])
+                    .range([0.5,2]);
+
+                ci = [];
+                var k_vals = math.multiply(pdf, N);
+                
                 for (var i = 0; i < 10; i++) {
                     for (var j = 0; j < 10; j++) {
+                        var probability = pdf[i][j];
+                        var k = k_vals[i][j];
+                        var interval = BinomialCI(.95, k, N);
+                        ci.push(interval);
                         var button = d3.select("#BoardButtonHolder").select("#button" + (i*10+j));
-                        button.style("background-color", colorScale(pdf[i][j]));
+                        button
+                            .style("background-color", colorScale(probability))
+                            .style("transform", "scale("+ radiusScale(probability) + ")")
+                            .attr("p", probability)
+                            .attr("ci_lower", function() { return(isNaN(interval[0]) ? 0 : interval[0])})
+                            .attr("ci_upper", interval[1])
+                            // .on("click", null)
+                            .on("mouseover", function() {
+                                var heatMapStatsDiv = d3.select("#HeatMapStats");
+                                heatMapStatsDiv.select("#Probability")
+                                    .text("Probability of Hit: " + d3.select(this).attr("p"))
+                                    .style("visibility", "visible");
+                                heatMapStatsDiv.select("#CI")
+                                    .text("95% CI: [" + d3.select(this).attr("ci_lower") + ", " + d3.select(this).attr("ci_upper") + "]")
+                                    .style("visibility", "visible");
+                            })
+                            .on("mouseout", function() {
+                                var heatMapStatsDiv = d3.select("#HeatMapStats");
+                                heatMapStatsDiv.select("#Probability")
+                                    .style("visibility", "hidden");
+                                heatMapStatsDiv.select("#CI")
+                                    .style("visibility", "hidden");
+                            });
                     }
                 }
-
-                var height = 750;
-                var gridSize = Math.floor(750/24);
-                var legendElementWidth = gridSize * 2;
                 
             }
     
@@ -399,7 +488,9 @@
             var N;
             var count_matrix;
             var pdf;
-                    //HERE
+
+            var ci;
+
             //Adding buttons for Ships
             var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
             
@@ -486,12 +577,12 @@
                         alert("Please select at least one type of ship to search for!");
                         return;
                     }
+                    calculateClicked = true;
                     var result = CALCULATE();
                     count_matrix = result[0];
                     N = result[1];
                     pdf = PDF(count_matrix, N);
                     generateHeatMap();
-                    calculateClicked = true;
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
@@ -509,17 +600,38 @@
                 .attr("id", "execute")
                 .attr("value", "Refresh")
                 .on("click", function(d){
+                    calculateClicked = false;
                     var button = d3.select("#BoardButtonHolder").selectAll(".button.button2")
                         .each(function(d,i) {
                             var button = d3.select("#BoardButtonHolder").select("#button" + i)
                                 .attr("clicked", "false")
                                 .style("background-color","transparent")
                                 .style("font-weight",500)
-                                .style("transform","scale(1)");
+                                .style("transform","scale(1)")
+                                .on("mouseover", function(d) {
+                                    if (d3.select(this).attr("clicked") == "false" && calculateClicked==false) {
+                                        makeButtonPink(this);
+                                    } 
+                                })
+                                .on("mouseout",function(d)
+                                   {
+                                       if(d3.select(this).attr("clicked")=="false" && calculateClicked==false)
+                                        {
+                                            makeButtonTransparent(this);
+                                        }
+                                });
 
-                            delete Board_Dict[button.attr("value")];
-                            calculateClicked = false;
+                            delete Board_Dict[button.attr("value")];                            
                         });
+                    d3.select("#ShipButtonHolder").selectAll(".button.button1")
+                            .each(function(d,i) {
+                                var button = d3.select("#ShipButtonHolder").select("#button" + i)
+                                .attr("clicked", "false")
+                                .style("background-color","#CCCCCC")
+                                .style("color","black")
+                                .style("font-weight",500); 
+                                delete Ship_Dict[button.attr("value")];
+                            });
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
@@ -553,15 +665,20 @@
             .style("color","transparent")
             .attr("value", function (d){return d; })
             .on("click", function(d){
-                if(d3.select(this).attr("clicked")=="false"){
-                    d3.select(this).attr("clicked","true");
-                    makeButtonPink(this);
-                    Board_Dict[this.value] = 1
+                if(calculateClicked == true) {
+                    return null;
                 }
-                else{
-                    d3.select(this).attr("clicked","false");
-                    makeButtonTransparent(this);
-                    delete Board_Dict[this.value];
+                else {
+                    if(d3.select(this).attr("clicked")=="false"){
+                        d3.select(this).attr("clicked","true");
+                        makeButtonPink(this);
+                        Board_Dict[this.value] = 1
+                    }
+                    else{
+                        d3.select(this).attr("clicked","false");
+                        makeButtonTransparent(this);
+                        delete Board_Dict[this.value];
+                    }
                 }
             })
             .on("mouseover", function(d)
