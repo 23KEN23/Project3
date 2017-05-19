@@ -410,6 +410,7 @@
                             .attr("p", probability)
                             .attr("ci_lower", function() { return(isNaN(interval[0]) ? 0 : interval[0])})
                             .attr("ci_upper", interval[1])
+                            // .on("click", null)
                             .on("mouseover", function() {
                                 var heatMapStatsDiv = d3.select("#HeatMapStats");
                                 heatMapStatsDiv.select("#Probability")
@@ -427,8 +428,7 @@
                                     .style("visibility", "hidden");
                             });
                     }
-                }                
-
+                }
                 
             }
     
@@ -515,17 +515,29 @@
                 .attr("id", "execute")
                 .attr("value", "Refresh")
                 .on("click", function(d){
+                    calculateClicked = false;
                     var button = d3.select("#BoardButtonHolder").selectAll(".button.button2")
                         .each(function(d,i) {
                             var button = d3.select("#BoardButtonHolder").select("#button" + i)
                                 .attr("clicked", "false")
                                 .style("background-color","transparent")
                                 .style("font-weight",500)
-                                .style("transform","scale(1)");
+                                .style("transform","scale(1)")
+                                .on("mouseover", function(d) {
+                                    if (d3.select(this).attr("clicked") == "false" && calculateClicked==false) {
+                                        makeButtonPink(this);
+                                    } 
+                                })
+                                .on("mouseout",function(d)
+                                   {
+                                       if(d3.select(this).attr("clicked")=="false" && calculateClicked==false)
+                                        {
+                                            makeButtonTransparent(this);
+                                        }
+                                });
 
                             delete Board_Dict[button.attr("value")];                            
                         });
-                    calculateClicked = false;
                     d3.select("#ShipButtonHolder").selectAll(".button.button1")
                             .each(function(d,i) {
                                 var button = d3.select("#ShipButtonHolder").select("#button" + i)
@@ -568,15 +580,20 @@
             .style("color","transparent")
             .attr("value", function (d){return d; })
             .on("click", function(d){
-                if(d3.select(this).attr("clicked")=="false"){
-                    d3.select(this).attr("clicked","true");
-                    makeButtonPink(this);
-                    Board_Dict[this.value] = 1
+                if(calculateClicked == true) {
+                    return null;
                 }
-                else{
-                    d3.select(this).attr("clicked","false");
-                    makeButtonTransparent(this);
-                    delete Board_Dict[this.value];
+                else {
+                    if(d3.select(this).attr("clicked")=="false"){
+                        d3.select(this).attr("clicked","true");
+                        makeButtonPink(this);
+                        Board_Dict[this.value] = 1
+                    }
+                    else{
+                        d3.select(this).attr("clicked","false");
+                        makeButtonTransparent(this);
+                        delete Board_Dict[this.value];
+                    }
                 }
             })
             .on("mouseover", function(d)
