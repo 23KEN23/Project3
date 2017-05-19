@@ -27,8 +27,10 @@
                 text-decoration: none;
                 display: inline-block;
                 font-size: 14px;
-                margin: 4px 60px;
+                margin-left: 50px;
+                margin-right: 50px;
                 margin-top: 40px;
+                margin-bottom: -10px;
                 cursor: pointer;
                 -webkit-transition-duration: 0.4s; /* Safari */
                 transition-duration: 0.4s;
@@ -40,8 +42,7 @@
                 }
             
             #ShipButtonHolder{
-                margin-top: 15%;
-                margin-bottom: 20px;
+                margin-top: 10%;
                 text-align: center;
                 display: inline-block;
 
@@ -49,15 +50,12 @@
             
             #BoardButtonHeatMapHolder
             {
+                margin-top: 40px;
                 text-align: center;
             }
             #BoardButtonHolder{
-                /*display: inline-block;
-                float: left;
-                width:150px;*/
                 width:750px;
                 height:750px;
-                margin-top: 60px;
                 margin-bottom: 40px;
                 display:inline-block;
             }
@@ -121,19 +119,41 @@
             #list
             {
                 text-align: left;
-                font-family: 'Lato';
-                color: #bcbcbc;
-                align-self: center;
-                width: 600
-                
+                font-family: 'Roboto';
+                color: white;
+                line-height: 24px;
+                letter-spacing: 1.3px;
+                display: inline-block;
+                vertical-align: left;
+                font-weight: 100;
+                width:70%
+            }
+            
+            b
+            {
+                text-align: left;
+                font-family: 'Roboto';
+                color: white;
+                line-height: 24px;
+                letter-spacing: 1.3px;
+                display: inline-block;
+                vertical-align: left;
+                font-weight: 100;
             }
             
             h1
             {
                 text-align: center;
-                color: #1c1c1e;
+                color: #999999;
                 font-size: 45;
-                font-family: 'Roboto';
+                font-family: Palatino;
+                line-height: 50px;
+                letter-spacing: 1.3px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 65%;
+                margin-top: 120px;
+                letter-spacing: 4px;
             }
             
             h3
@@ -141,6 +161,8 @@
                 text-align: center;
                 font-size: 30;
                 font-family: 'Roboto';
+                color: #F28573;
+                letter-spacing: 8px;
             }
             
             #Instructions
@@ -154,10 +176,21 @@
             
             #HeatMapStats
             {
-                padding-top: 20px;
+                padding: 20px;
                 vertical-align: middle;
                 text-align: center;
+                font-weight: 200;
+                color: white;
+                font-family: Roboto;
             }
+            
+            #refreshText
+            {
+                font-weight: 600;
+                color: #F28573;
+            }
+            
+            
 
         </style>
         
@@ -167,14 +200,14 @@
         <h1>BATTLESHIP CALCULATOR</h1>
         <h3>INSTRUCTIONS</h3>
         <div id="Instructions">
+            <br>
             <p id="List">
-            <b>1.</b> Select the enemy ships you still need to find <br>
-            <b>2.</b> Select which grid spaces you've already shot into <br>
-            <b>3.</b> Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship. Hover to show the sample probability and confidence interval for that grid space. <br>
-            <b>4.</b> If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
-            <b>CLICK "REFRESH" TO RESET THE BOARD</b>
-            
+            <b>1.</b> Select the enemy ships you still need to find.<br><br>
+            <b>2.</b> Select which grid spaces you've already shot into.<br><br>
+            <b>3.</b> Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship. Hover to show the sample probability and confidence interval for that grid space.<br><br>
+            <b>4.</b> If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities.<br><br>
             </p>
+             <br><br><b id="refreshText">Click 'Refresh' to reset the board</b>
         </div>
         <div id="ShipButtonHolder"></div>
         <div id="ExecuteGame"></div>
