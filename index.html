@@ -324,6 +324,9 @@
                 var ub = 1-jStat.beta.inv(alpha/2,n-k,k+1);
                 var lb = 1-jStat.beta.inv(1-(alpha/2),n-k+1,k);
                 
+                ub = Math.round(ub*1000)/1000
+                lb = Math.round(lb*1000)/1000
+                
                 var CI = [lb,ub];
                 return CI;
             }
