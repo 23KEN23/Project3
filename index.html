@@ -83,6 +83,24 @@
                 
                 }
             
+            p
+            {
+                text-align: left;
+                align-self: center;
+                width: 600
+                
+            }
+            
+            h3
+            {
+                text-align: center;
+            }
+            #Instructions
+            {
+                margin: auto;
+                width: 600;
+            }
+            
             
         </style>
         
@@ -91,14 +109,16 @@
     <body>
         <h1>BATTLESHIP CALCULATOR</h1>
         <h3>Instructions</h3>
-        <p>
+        <div id="Instructions">
+            <p>
             1) Select the enemy ships you still need to find <br>
             2) Select which grid spaces you've already shot into <br>
             3) Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship <br>
             4) If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
             Click "Refresh" to reset the board
             
-        </p>
+            </p>
+        </div>
         <div id="ShipButtonHolder"></div>
         <div id="ExecuteGame"></div>
         <div id="BoardButtonHeatMapHolder">
