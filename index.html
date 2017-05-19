@@ -4,6 +4,7 @@
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js">
         </script>
+        <link href = "https://fonts.googleapis.com/css?family=Lato|Roboto:900" rel="stylesheet">
         <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
         <script src=https://cdn.jsdelivr.net/jstat/latest/jstat.min.js></script>
         
@@ -86,19 +87,35 @@
             #list
             {
                 text-align: left;
+                font-family: 'Lato';
+                color: #bcbcbc;
                 align-self: center;
                 width: 600
                 
             }
             
+            h1
+            {
+                text-align: center;
+                color: #1c1c1e;
+                font-size: 45;
+                font-family: 'Roboto';
+            }
+            
             h3
             {
                 text-align: center;
+                font-size: 30;
+                font-family: 'Roboto';
             }
+            
             #Instructions
             {
                 margin: auto;
                 width: 600;
+                font-family: 'Roboto';
+                font-size: 18px;
+                color: white;
             }
             
             #HeatMapStats
@@ -115,14 +132,14 @@
 
     <body>
         <h1>BATTLESHIP CALCULATOR</h1>
-        <h3>Instructions</h3>
+        <h3>INSTRUCTIONS</h3>
         <div id="Instructions">
             <p id="List">
-            1) Select the enemy ships you still need to find <br>
-            2) Select which grid spaces you've already shot into <br>
-            3) Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship <br>
-            4) If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
-            Click "Refresh" to reset the board
+            <b>1.</b> Select the enemy ships you still need to find <br>
+            <b>2.</b> Select which grid spaces you've already shot into <br>
+            <b>3.</b> Press "Calculate" to display a heat map of the most likely grid spaces for hitting a ship. Hover to show the sample probability and confidence interval for that grid space. <br>
+            <b>4.</b> If you've missed once you've taken your turn, select the space you shot into and press "Calculate" to show the updated probabilities. <br><br>
+            <b>CLICK "REFRESH" TO RESET THE BOARD</b>
             
             </p>
         </div>
