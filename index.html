@@ -674,15 +674,20 @@
             .style("color","transparent")
             .attr("value", function (d){return d; })
             .on("click", function(d){
-                if(d3.select(this).attr("clicked")=="false"){
-                    d3.select(this).attr("clicked","true");
-                    makeButtonPink(this);
-                    Board_Dict[this.value] = 1
+                if (calculateClicked == true) {
+                    return null;
                 }
-                else{
-                    d3.select(this).attr("clicked","false");
-                    makeButtonTransparent(this);
-                    delete Board_Dict[this.value];
+                else {
+                    if(d3.select(this).attr("clicked")=="false"){
+                        d3.select(this).attr("clicked","true");
+                        makeButtonPink(this);
+                        Board_Dict[this.value] = 1
+                    }
+                    else{
+                        d3.select(this).attr("clicked","false");
+                        makeButtonTransparent(this);
+                        delete Board_Dict[this.value];
+                    }
                 }
             })
             .on("mouseover", function(d)
