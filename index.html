@@ -346,12 +346,22 @@
                     .domain([0,0.0000000001,  maxVal/2, maxVal])
                     .range(['black','grey', 'orange', 'red']);
 
+                var radiusScale = d3.scaleLinear()
+                    .domain([0,maxVal])
+                    .range([0.5,2]);
+
+                ci = [];
                 for (var i = 0; i < 10; i++) {
                     for (var j = 0; j < 10; j++) {
                         var button = d3.select("#BoardButtonHolder").select("#button" + (i*10+j));
-                        button.style("background-color", colorScale(pdf[i][j]));
+                        button
+                            .style("background-color", colorScale(pdf[i][j]))
+                            .style("transform", "scale("+ radiusScale(pdf[i][j]) + ")")
+                            .attr("p", pdf[i][j]);
+                        ci.push(BinomialCI(.95, pdf[i][j], N));
                     }
-                }
+                }                
+
 
                 var height = 750;
                 var gridSize = Math.floor(750/24);
@@ -365,7 +375,8 @@
             var N;
             var count_matrix;
             var pdf;
-                    
+            var ci;
+
             //Adding buttons for Ships
             var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
             
@@ -379,7 +390,7 @@
             .attr("clicked","false")
             .attr("id",function(d,i){return "button"+i})
             .attr("value", function (d){return d; })
-            .style("color","transparent")
+            // .style("color","transparent")
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
@@ -418,12 +429,12 @@
                         alert("Please select at least one type of ship to search for!");
                         return;
                     }
+                    calculateClicked = true;
                     var result = CALCULATE();
                     count_matrix = result[0];
                     N = result[1];
                     pdf = PDF(count_matrix, N);
                     generateHeatMap();
-                    calculateClicked = true;
                 })
                 .on("mouseover", function() {
                     makeButtonDark(this)
