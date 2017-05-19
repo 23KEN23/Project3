@@ -17,27 +17,32 @@
                 text-align: center;
             }
             .button1{
-                background-color: #CCCCCC;
-                color: black;
+                background-color: transparent;
+                color: #F28573;
                 text-align: center;
-                padding: 14px;
+                padding: 20px;
+                padding-left: 28px;
+                padding-right: 28px;
                 text-decoration: none;
                 display: inline-block;
                 font-size: 14px;
-                margin: 4px 6px;
+                margin: 4px 60px;
+                margin-top: 40px;
                 cursor: pointer;
                 -webkit-transition-duration: 0.4s; /* Safari */
                 transition-duration: 0.4s;
-                border: 1px solid;
+                border: 1px solid #F28573;
                 outline: none;
                 /*width:100%;*/
-                border-radius: 6px;
-                font-weight: 100;
+                border-radius: 40px;
+                font-weight: 600;
                 }
             
             #ShipButtonHolder{
                 margin-top: 15%;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
+                text-align: center;
+                display: inline-block;
             }
             
             #BoardButtonHeatMapHolder
@@ -50,7 +55,7 @@
                 width:150px;*/
                 width:750px;
                 height:750px;
-                margin-top: 30px;
+                margin-top: 60px;
                 margin-bottom: 40px;
                 display:inline-block;
             }
@@ -80,16 +85,45 @@
                 margin: 20px;
                 /*-webkit-transition-duration: 0.4s;*/ /* Safari */
                 /*transition-duration: 0.4s;*/
-                
                 }
             
+            img
+            {
+                background-color: transparent;
+                border: none;
+                background-repeat: no-repeat;
+                background-size: contain;
+                width: 90px;
+                height: 60px;
+                -webkit-transition: all 0.3s ease-in-out;
+                -moz-transition: all 0.3s ease-in-out;
+                -o-transition: all 0.3s ease-in-out;
+                -ms-transition: all 0.3s ease-in-out;
+                transition: all 0.3s ease-in-out;
+            }
+            
+            .div1
+            {
+                width:120px;
+                height:100px;
+                float: left;
+                font-family: Futura;
+                color: #999999;
+                margin-bottom: 40px;
+                -webkit-transition: all 0.3s ease-in-out;
+                -moz-transition: all 0.3s ease-in-out;
+                -o-transition: all 0.3s ease-in-out;
+                -ms-transition: all 0.3s ease-in-out;
+                transition: all 0.3s ease-in-out;
+            }
             
         </style>
         
     </head>
 
     <body>
-        <div id="ShipButtonHolder"></div>
+        <div id="ShipButtonHolder">
+        </div>
         <div id="ExecuteGame"></div>
         <div id="BoardButtonHeatMapHolder">
             <div id="BoardButtonHolder"></div>
@@ -327,15 +361,15 @@
             
             function makeButtonDark(btn)
             {
-                d3.select(btn).style("background-color","#848482");
+                d3.select(btn).style("background-color","#F28573");
                 d3.select(btn).style("color","white");
                 d3.select(btn).style("font-weight",500); 
             }
             
             function makeButtonLight(btn)
             {
-                d3.select(btn).style("background-color","#CCCCCC");
-                d3.select(btn).style("color","black");
+                d3.select(btn).style("background-color","transparent");
+                d3.select(btn).style("color","#F28573");
                 d3.select(btn).style("font-weight",500); 
             }
             
@@ -365,44 +399,78 @@
             var N;
             var count_matrix;
             var pdf;
-                    
+                    //HERE
             //Adding buttons for Ships
             var Game_Ships = ["Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"];
             
             var Ship_BH = d3.select("#ShipButtonHolder");
-            var ship_buttons = Ship_BH.selectAll("input").data(Game_Ships);
+            var ship_div = Ship_BH.selectAll("div").data(Game_Ships);
+            
 
-            ship_buttons.enter()
-            .append("input")
-            .attr("type","button")
-            .attr("class","button button1")
+            ship_div.enter()
+            .append("div")
+            .attr("class","div div1")
             .attr("clicked","false")
-            .attr("id",function(d,i){return "button"+i})
-            .attr("value", function (d){return d; })
-            .style("color","transparent")
+            .attr("id",function(d,i){return "div"+i})
+            .style("z-index",3)
             .on("click", function(d){
                 if(d3.select(this).attr("clicked")=="false"){
                     d3.select(this).attr("clicked","true");
-                    makeButtonDark(this);
-                    Ship_Dict[this.value] = 1;
+                    onDivHover(this,d);
+                    Ship_Dict[d] = 1;
                 }
                 else{
                     d3.select(this).attr("clicked","false");
-                    makeButtonLight(this);
-                    delete Ship_Dict[this.value];
+                    onDivNotHover(this,d);
+                    delete Ship_Dict[d];
                 }
             })
             .on("mouseover", function(d)
                {
-                makeButtonDark(this)
+                onDivHover(this,d);
             })
             .on("mouseout",function(d)
                {
                    if(d3.select(this).attr("clicked")=="false")
                     {
-                        makeButtonLight(this);
+                        onDivNotHover(this,d);
                     }
             });
+            
+            Ship_BH.selectAll("div")
+            .append("img")
+            .attr("src",function(d){return d+".png";})
+            .style("z-index",0);
+            
+            Ship_BH.selectAll("div")
+            .append("div")
+            .text(function(d){return d;})
+            .style("padding",20)
+            .style("padding-bottom",10)
+            .style("z-index",0);
+            
+            var divs = Ship_BH.selectAll(".div.div1");
+            
+           divs.append("div")
+           .attr("class","num")
+            .text(function(d){return "Length: "+ new Ship(d).len;}).style("z-index",0)
+           .style("display","none");
+            //.style("z-index",0);
+            
+            function onDivHover(div,d)
+            {
+                d3.select(div).select("img").attr("src",d+"-hover.png");
+                d3.select(div).style("color","#FFFFFF");
+                d3.select(div).select(".num").style("display","inline");
+            }
+            
+            function onDivNotHover(div,d)
+            {
+                d3.select(div).select("img").attr("src",d+".png");
+                d3.select(div).style("color","#999999");
+                d3.select(div).select(".num").style("display","none");
+            }
+            
             
             var calculateClicked = false;
             
